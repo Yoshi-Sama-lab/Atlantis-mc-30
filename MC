@@ -1,0 +1,535 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"></meta>
+<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+<title>Chattonosekai</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&amp;family=DM+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet"></link>
+<!--Shut your bitch ass and fuck off   -->
+<style>
+  @media screen and (max-width: 480px) {
+    div.page {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    #disqus_thread, 
+    #disqus_thread iframe {
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --yellow:    #d4ff00;
+    --blue-faint: rgba(100, 180, 255, 0.07);
+    --line:      rgba(100, 180, 255, 0.14);
+    --text-dim:  rgba(180, 220, 255, 0.38);
+    --text-mid:  rgba(190, 225, 255, 0.72);
+    --text-full: rgba(210, 238, 255, 0.95);
+    --bg:        #050d1a;
+
+    --orb1: rgba(0,70,110,0.3);
+    --orb2: rgba(0,110,90,0.18);
+    --orb3: rgba(5,30,70,0.35);
+
+    transition:
+      background-color 0.7s ease,
+      color 0.7s ease;
+  }
+
+  :root.bl-mode {
+    --yellow:    #ff6b9d;
+    --blue-faint: rgba(200, 100, 180, 0.07);
+    --line:      rgba(220, 130, 190, 0.18);
+    --text-dim:  rgba(240, 190, 230, 0.42);
+    --text-mid:  rgba(245, 205, 235, 0.75);
+    --text-full: rgba(255, 230, 245, 0.95);
+    --bg:        #12071a;
+    --orb1:      rgba(120, 20, 80, 0.35);
+    --orb2:      rgba(90, 10, 120, 0.25);
+    --orb3:      rgba(60, 5, 90, 0.40);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-full);
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.7s ease, color 0.7s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 60%, var(--orb1) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 15%, var(--orb2) 0%, transparent 50%),
+      radial-gradient(ellipse at 55% 85%, var(--orb3) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    transition: background 0.7s ease;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .banner-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 2px 2px;
+    perspective: 1200px;
+    cursor: pointer;
+  }
+
+  .banner-inner {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.15, 1.0);
+  }
+
+
+  .banner-wrap.flipped .banner-inner {
+    transform: rotateY(180deg);
+  }
+
+  .banner-face {
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .banner-face.front {
+    display: block;
+  }
+
+  .banner-face.back {
+    position: absolute;
+    top: 0; left: 0;
+    transform: rotateY(180deg);
+  }
+
+  .banner-face img {
+    width: 100%;
+    display: block;
+  }
+
+  .banner-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+    transition: background 0.7s ease;
+  }
+
+
+  .banner-hint {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    z-index: 3;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.4s;
+  }
+
+  .banner-wrap.flipped .banner-hint {
+    opacity: 0;
+  }
+
+  .rules-block {
+    padding: 2.5rem 0 0;
+    text-align: center;
+  }
+  .rules-block a {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    letter-spacing: -0.02em;
+    color: var(--yellow);
+    text-decoration: none;
+    line-height: 1;
+    display: inline-block;
+    position: relative;
+    transition: opacity 0.2s, color 0.7s ease;
+  }
+  .rules-block a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--yellow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease, background 0.7s ease;
+  }
+  .rules-block a:hover { opacity: 0.75; }
+  .rules-block a:hover::after { transform: scaleX(1); }
+
+  .mods-line {
+    margin-top: 1rem;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    transition: color 0.7s ease;
+  }
+  .mods-line a {
+    color: var(--text-mid);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .mods-line a:hover { color: var(--text-full); border-color: rgba(180,220,255,0.5); }
+
+  .sep {
+    margin: 3rem 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .sep::before, .sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    transition: background 0.7s ease;
+  }
+  .sep span {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    transition: color 0.7s ease;
+  }
+
+  .nav-list {
+    list-style: none;
+  }
+
+  .nav-item {
+    border-top: 1px solid var(--line);
+    transition: border-color 0.7s ease;
+  }
+  .nav-item:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-item a {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding: 1.1rem 0;
+    text-decoration: none;
+    transition: padding-left 0.25s ease;
+  }
+  .nav-item a:hover {
+    padding-left: 8px;
+  }
+
+  .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    min-width: 20px;
+    transition: color 0.2s;
+    padding-top: 2px;
+  }
+  .nav-item a:hover .nav-num { color: var(--yellow); }
+
+  .nav-name {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: clamp(13px, 3.2vw, 18px);
+    letter-spacing: -0.01em;
+    color: var(--text-full);
+    transition: color 0.2s;
+    line-height: 1.1;
+  }
+  .nav-item a:hover .nav-name { color: var(--yellow); }
+
+  .nav-tag {
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    align-self: center;
+    transition: color 0.2s;
+  }
+  .nav-item a:hover .nav-tag { color: rgba(212,255,0,0.45); }
+
+  .nav-item.discord a:hover .nav-name { color: #7289da; }
+  .nav-item.discord a:hover .nav-num  { color: #7289da; }
+  .nav-item.memory  a:hover .nav-name { color: #ff8fa0; }
+  .nav-item.memory  a:hover .nav-num  { color: #ff8fa0; }
+
+  footer {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+  }
+  
+  #nsfw-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  z-index: 999;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--text-full);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 0.9rem 1.4rem;
+  border-radius: 4px;
+  max-width: min(420px, 90vw);
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  opacity: 0;
+}
+
+#nsfw-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+#nsfw-toast .toast-label {
+  color: var(--yellow);
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+#nsfw-toast .toast-dismiss {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+.nav-item.nsfw-highlight {
+  transition: background 0.6s ease, border-color 0.6s ease;
+  animation: nsfw-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes nsfw-pulse {
+  0%, 100% { background: transparent; }
+  50%       { background: rgba(212,255,0,0.07); }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="banner-wrap" id="bannerWrap" title="Click to flip">
+    <div class="banner-inner">
+
+      <div class="banner-face front">
+        <img alt="Chattonosekai" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjGAdg7_TIp7IaTehVqfvm3WNEX7yRrHzjntDNBYBErD6f9goK2PD1xb_npw5tD5OpGF3qC-MldG0JcqewG82sn13kalAO78f3_v8Gi8nSvYBf_fiM5qHb1YLX55MGB-JWmegc-0c47Kga1bHb0M4Tr60WWPVyIGt6JymVJAHOqBCW7fs3ZUBrZicVvXBQ/w649-h366/banner%201.jpeg" />
+      </div>
+
+      <div class="banner-face back">
+        <img alt="Chattonosekai — BL Edition" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjqyZzfm3xwyzyOav4-3BDjDlLxq8pM77AQEPs2jOZ2ovFbbwKWHiQWD4-DESaCJjk9rRucHO9ANfiFMHpI-Yjs9xYOaRq4WWfMDsNgP6PadHT3-xd52TFOCC7G9RAhmSc55sIPtsOzLHkh4ME3c27RYH81uFQeQz5dlHh2qbo9ZyuWIoDRW5FnDCwwE-s/s1920/banner%202.jpg" />
+      </div>
+
+    </div>
+    <span class="banner-hint">click to flip ↻</span>
+  </div>
+
+  <div class="rules-block">
+    <a href="https://chattonosekai.blogspot.com/p/rules.html">RULES</a>
+    <p class="mods-line">
+      <a href="https://chattonosekai.blogspot.com/2024/02/atlantis-mod-corner.html">meet the mods →</a>
+    </p>
+  </div>
+
+  <div class="sep"><span>rooms</span></div>
+
+  <ul class="nav-list">
+    <li class="nav-item">
+      <a href="https://chattonosekai.blogspot.com/2023/12/screen-shot-room.html">
+        <span class="nav-num">01</span>
+        <span class="nav-name">Screenshot Room</span>
+        <span class="nav-tag">gallery</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="https://chattonosekai.blogspot.com/2023/12/art-room.html">
+        <span class="nav-num">02</span>
+        <span class="nav-name">Art Room</span>
+        <span class="nav-tag">creative</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="https://chattonosekai.blogspot.com/2023/11/couple-room.html">
+        <span class="nav-num">03</span>
+        <span class="nav-name">Couple Room</span>
+        <span class="nav-tag">social</span>
+      </a>
+    </li>
+    <li class="nav-item nsfw-highlight">
+  <a href="https://chattonosekai.blogspot.com/2023/11/cultured-room.html">
+    <span class="nav-num">04</span>
+    <span class="nav-name">NSFW Room</span>
+    <span class="nav-tag">jerk</span>
+  </a>
+</li>
+  </ul>
+
+  <div class="sep"><span>links</span></div>
+
+  <ul class="nav-list">
+    <li class="nav-item">
+      <a href="https://theunholy-empire.blogspot.com/">
+        <span class="nav-num">—</span>
+        <span class="nav-name">Badge Request</span>
+      </a>
+    </li>
+    <li class="nav-item discord">
+      <a href="https://discord.gg/yeFP2mG5BH" target="_blank">
+        <span class="nav-num">—</span>
+        <span class="nav-name">Discord Server</span>
+        <span class="nav-tag">external</span>
+      </a>
+    </li>
+    <li class="nav-item memory">
+      <a href="https://atlantis-memories.blogspot.com/">
+        <span class="nav-num">—</span>
+        <span class="nav-name">Memories</span>
+      </a>
+    </li>
+  </ul>
+
+</div>
+<div id="nsfw-toast">
+  <span class="toast-label">psst — room 04</span>
+  we have an nsfw room too, in case you didn't know 👀
+  <span class="toast-dismiss">tap anywhere to dismiss</span>
+</div>
+<script>
+(function() {
+
+  var wrap           = document.getElementById('bannerWrap');
+  var root           = document.documentElement;
+  var bl             = false;
+  var lastSavedColor = '#66D3FA';
+
+  function changeDisqusColorAndReload(color) {
+    var existingStyle = document.getElementById('disqus_thread_style');
+    if (existingStyle) {
+      existingStyle.innerHTML = '#disqus_thread a { color: ' + color + ' !important; }';
+    } else {
+      var style = document.createElement('style');
+      style.id = 'disqus_thread_style';
+      style.type = 'text/css';
+      style.innerHTML = '#disqus_thread a { color: ' + color + ' !important; }';
+      document.head.appendChild(style);
+    }
+    if (color !== lastSavedColor) {
+      setTimeout(function() {
+        if (typeof DISQUS !== 'undefined') {
+          DISQUS.reset({ reload: true });
+        }
+      }, 100);
+      lastSavedColor = color;
+    }
+  }
+
+  if (wrap) {
+    wrap.addEventListener('click', function() {
+      bl = !bl;
+      wrap.classList.toggle('flipped', bl);
+      root.classList.toggle('bl-mode', bl);
+      changeDisqusColorAndReload(bl ? '#ff6b9d' : '#66D3FA');
+    });
+  }
+
+  var toast    = document.getElementById('nsfw-toast');
+  var nsfwItem = document.querySelector('.nav-item.nsfw-highlight');
+
+  if (toast && !localStorage.getItem('nsfw_toast_seen')) {
+    setTimeout(function() { toast.classList.add('show'); }, 1200);
+    document.addEventListener('click', function dismissToast() {
+      toast.classList.remove('show');
+      if (nsfwItem) nsfwItem.classList.remove('nsfw-highlight');
+      localStorage.setItem('nsfw_toast_seen', '1');
+      document.removeEventListener('click', dismissToast);
+    });
+  } else {
+    if (nsfwItem) nsfwItem.classList.remove('nsfw-highlight');
+  }
+
+  function check() {
+    var el = document.querySelector('.centered-top-container');
+    if (!el) return;
+    if (window.getComputedStyle(el).position === 'fixed') {
+      el.style.setProperty('display', 'none', 'important');
+    } else {
+      el.style.removeProperty('display');
+    }
+  }
+
+  var el = document.querySelector('.centered-top-container');
+  if (el) {
+    new MutationObserver(check).observe(el, {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+  window.addEventListener('scroll', check, { passive: true });
+
+})();
+</script>
+  
+</body>
+</html>
